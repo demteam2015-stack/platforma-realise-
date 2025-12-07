@@ -11,7 +11,9 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-const GenerateSheetNameInputSchema = z.string().describe('The content of the sheet.');
+const GenerateSheetNameInputSchema = z.object({
+  content: z.string().describe('The content of the sheet.'),
+});
 export type GenerateSheetNameInput = z.infer<typeof GenerateSheetNameInputSchema>;
 
 const GenerateSheetNameOutputSchema = z.object({
@@ -19,8 +21,8 @@ const GenerateSheetNameOutputSchema = z.object({
 });
 export type GenerateSheetNameOutput = z.infer<typeof GenerateSheetNameOutputSchema>;
 
-export async function generateSheetName(content: GenerateSheetNameInput): Promise<GenerateSheetNameOutput> {
-  return generateSheetNameFlow(content);
+export async function generateSheetName(input: GenerateSheetNameInput): Promise<GenerateSheetNameOutput> {
+  return generateSheetNameFlow(input);
 }
 
 const prompt = ai.definePrompt({
@@ -32,7 +34,7 @@ const prompt = ai.definePrompt({
   Given the following content of a sheet, suggest a concise and relevant name for it.
 
   Content:
-  {{content}}
+  {{{content}}}
 
   Name:`,
 });
@@ -43,8 +45,8 @@ const generateSheetNameFlow = ai.defineFlow(
     inputSchema: GenerateSheetNameInputSchema,
     outputSchema: GenerateSheetNameOutputSchema,
   },
-  async content => {
-    const {output} = await prompt(content);
+  async input => {
+    const {output} = await prompt(input);
     return output!;
   }
 );

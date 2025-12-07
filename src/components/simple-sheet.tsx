@@ -44,7 +44,7 @@ export default function SimpleSheet() {
 
       try {
         const plainText = editorRef.current.innerText;
-        const result = await generateSheetName(plainText);
+        const result = await generateSheetName({ content: plainText });
         if (result.sheetName) {
           setSheetName(result.sheetName);
           toast({
