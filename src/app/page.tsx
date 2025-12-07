@@ -1,9 +1,11 @@
-import SimpleSheet from '@/components/simple-sheet';
+import HeroSection from "@/components/hero-section";
+import FeatureSection from "@/components/feature-section";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen w-full items-center justify-center p-4 sm:p-6 md:p-8 bg-background">
-      <SimpleSheet />
-    </main>
+    <div>
+      <HeroSection />
+      <FeatureSection />
+    </div>
   );
 }
