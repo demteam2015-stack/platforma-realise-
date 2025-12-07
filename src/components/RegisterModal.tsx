@@ -79,11 +79,11 @@ export default function RegisterModal({ isOpen, onClose }: { isOpen: boolean; on
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-md mx-auto bg-gray-900 border border-gray-700 rounded-3xl shadow-2xl overflow-hidden"
+        className="w-full max-w-md mx-auto bg-gray-900/80 border border-gray-700 rounded-3xl shadow-2xl overflow-hidden"
         onClick={e => e.stopPropagation()}
       >
         {/* Заголовок */}
