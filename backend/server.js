@@ -7,7 +7,7 @@ const app = express();
 
 // Настраиваем CORS
 const allowedOrigins = [
-  'https://demplatform.vercel.app', // ← ваш домен
+  'https://demplatform.vercel.app', // ← ваш домен Vercel
   'http://localhost:3000' // ← для локальной разработки
 ];
 
@@ -22,6 +22,35 @@ app.use(cors({
 }));
 
 app.use(express.json());
+
+// ... (остальные маршруты)
+
+// НОВЫЙ МАРШРУТ: Вход пользователя
+app.post('/api/login', async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ error: 'Email обязателен' });
+  }
+
+  try {
+    await client.connect();
+    const result = await client.query('SELECT id, email, first_name, last_name, birth_date, gender FROM users WHERE email = $1', [email]);
+    await client.end();
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Пользователь с таким email не найден' });
+    }
+
+    res.status(200).json({ user: result.rows[0] });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Ошибка сервера' });
+  }
+});
+
+// ... (остальные маршруты)
 
 // Проверка подключения
 app.get('/api/health', async (req, res) => {
