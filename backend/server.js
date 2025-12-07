@@ -5,9 +5,20 @@ const client = require('./db');
 
 const app = express();
 
-// Разрешаем Vercel
+// Настраиваем CORS
+const allowedOrigins = [
+  'https://demplatform.vercel.app', // ← ваш домен
+  'http://localhost:3000' // ← для локальной разработки
+];
+
 app.use(cors({
-  origin: 'https://demplatform.vercel.app', // ← замени на свой домен
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
 }));
 
 app.use(express.json());
