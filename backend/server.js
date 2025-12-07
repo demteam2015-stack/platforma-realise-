@@ -5,10 +5,15 @@ const client = require('./db');
 
 const app = express();
 
+// --- ИСПРАВЛЕНИЕ: Подключаемся к БД один раз при старте --- 
+client.connect()
+  .then(() => console.log('✅ База данных успешно подключена'))
+  .catch(err => console.error('❌ ОШИБКА ПОДКЛЮЧЕНИЯ К БД:', err.stack));
+
 // Настраиваем CORS
 const allowedOrigins = [
-  'https://demplatform.vercel.app', // ← ваш домен Vercel
-  'http://localhost:3000' // ← для локальной разработки
+  'https://demplatform.vercel.app', 
+  'http://localhost:3000'
 ];
 
 app.use(cors({
@@ -23,9 +28,7 @@ app.use(cors({
 
 app.use(express.json());
 
-// ... (остальные маршруты)
-
-// НОВЫЙ МАРШРУТ: Вход пользователя
+// МАРШРУТ: Вход пользователя
 app.post('/api/login', async (req, res) => {
   const { email } = req.body;
 
@@ -34,9 +37,8 @@ app.post('/api/login', async (req, res) => {
   }
 
   try {
-    await client.connect();
+    // УБРАЛИ client.connect() и client.end()
     const result = await client.query('SELECT id, email, first_name, last_name, birth_date, gender FROM users WHERE email = $1', [email]);
-    await client.end();
 
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Пользователь с таким email не найден' });
@@ -50,14 +52,11 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// ... (остальные маршруты)
-
-// Проверка подключения
+// МАРШРУТ: Проверка подключения
 app.get('/api/health', async (req, res) => {
   try {
-    await client.connect();
+    // УБРАЛИ client.connect() и client.end()
     const result = await client.query('SELECT NOW() as now');
-    await client.end();
     res.json({ status: 'ok', db_time: result.rows[0].now });
   } catch (err) {
     console.error('❌ DB Error:', err.message);
@@ -65,13 +64,12 @@ app.get('/api/health', async (req, res) => {
   }
 });
 
-// Пример: регистрация
+// МАРШРУТ: Регистрация
 app.post('/api/register', async (req, res) => {
   const { email, firstName, lastName, birthDate, gender } = req.body;
 
   try {
-    await client.connect();
-
+    // УБРАЛИ client.connect() и client.end()
     const result = await client.query(
       `INSERT INTO users (email, first_name, last_name, birth_date, gender)
        VALUES ($1, $2, $3, $4, $5) 
@@ -79,7 +77,6 @@ app.post('/api/register', async (req, res) => {
       [email, firstName, lastName, birthDate, gender]
     );
 
-    await client.end();
     res.status(201).json({ user: result.rows[0] });
   } catch (err) {
     console.error(err);

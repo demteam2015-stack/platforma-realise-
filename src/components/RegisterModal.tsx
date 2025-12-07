@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { fetchApi } from '@/lib/api'; // ← Импортируем нашу функцию
+import { fetchApi } from '@/lib/api';
 import Button from './ui/Button';
 
 type RegisterModalProps = {
@@ -12,7 +12,7 @@ type RegisterModalProps = {
 };
 
 export default function RegisterModal({ isOpen, onClose, onSwitchToLogin }: RegisterModalProps) {
-  const { login } = useAuth(); // Мы будем использовать login из контекста, чтобы обновить состояние
+  const { login } = useAuth();
 
   const [formData, setFormData] = useState({
     email: '',
@@ -37,19 +37,15 @@ export default function RegisterModal({ isOpen, onClose, onSwitchToLogin }: Regi
     setError(null);
 
     try {
-      // Отправляем реальный запрос на бэкенд
       const data = await fetchApi('/api/register', {
         method: 'POST',
         body: JSON.stringify(formData),
       });
 
-      // Если регистрация успешна, "логиним" пользователя в фронтенде
-      // и сохраняем его данные
-      login(data.user); 
-      onClose(); // Закрываем модальное окно
+      login(data.user);
+      onClose();
 
     } catch (err: any) {
-      // Устанавливаем сообщение об ошибке, которое вернет наш API
       setError(err.message || 'Не удалось зарегистрироваться. Попробуйте снова.');
     } finally {
       setIsLoading(false);
@@ -63,13 +59,13 @@ export default function RegisterModal({ isOpen, onClose, onSwitchToLogin }: Regi
         <h2 className="text-2xl font-bold text-center mb-6 text-white">Регистрация</h2>
         
         <form onSubmit={handleSubmit} className="space-y-5">
-          <input type="email" name="email" placeholder="Email" required onChange={handleChange} className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition" />
+          <input value={formData.email} type="email" name="email" placeholder="Email" required onChange={handleChange} className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition" />
           <div className="flex gap-4">
-            <input type="text" name="firstName" placeholder="Имя" required onChange={handleChange} className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition" />
-            <input type="text" name="lastName" placeholder="Фамилия" required onChange={handleChange} className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition" />
+            <input value={formData.firstName} type="text" name="firstName" placeholder="Имя" required onChange={handleChange} className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition" />
+            <input value={formData.lastName} type="text" name="lastName" placeholder="Фамилия" required onChange={handleChange} className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition" />
           </div>
-          <input type="date" name="birthDate" placeholder="Дата рождения" required onChange={handleChange} className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition" />
-          <select name="gender" onChange={handleChange} className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+          <input value={formData.birthDate} type="date" name="birthDate" placeholder="Дата рождения" required onChange={handleChange} className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition" />
+          <select value={formData.gender} name="gender" onChange={handleChange} className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
             <option value="male">Мужчина</option>
             <option value="female">Женщина</option>
           </select>
