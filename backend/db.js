@@ -2,7 +2,8 @@
 const { Client } = require('pg');
 const fs = require('fs');
 const path = require('path');
-require('dotenv').config();
+// Явно указываем путь к .env файлу
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 // Путь к SSL-сертификату (должен быть в .cloud-certs/root.crt)
 const caCertPath = path.join(__dirname, '.cloud-certs', 'root.crt');
@@ -24,7 +25,7 @@ const client = new Client({
   password: process.env.POSTGRESQL_PASSWORD,
   port: parseInt(process.env.POSTGRESQL_PORT),
   ssl: {
-    rejectUnauthorized: true,
+    rejectUnauthorized: true, // <-- ВОЗВРАЩАЕМ БЕЗОПАСНУЮ НАСТРОЙКУ
     ca: caCert,
   },
 });
