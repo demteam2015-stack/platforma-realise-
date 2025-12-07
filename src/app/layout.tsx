@@ -1,15 +1,12 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Demplatform - Платформа для проведения турниров",
-  description: "Единая платформа для организации и участия в соревнованиях по единоборствам.",
+  title: "Новое приложение",
+  description: "Создано с помощью Firebase Studio",
 };
 
 export default function RootLayout({
@@ -19,12 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" className="dark">
-      <body className={`${inter.className} bg-background text-foreground flex flex-col min-h-screen`}>
-        <Header />
-        <main className="flex-grow">{children}</main>
-        <Footer />
-        <Toaster />
-      </body>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }

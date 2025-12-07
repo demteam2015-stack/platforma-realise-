@@ -1,11 +1,7 @@
-import HeroSection from "@/components/hero-section";
-import FeatureSection from "@/components/feature-section";
-
 export default function Home() {
   return (
-    <div>
-      <HeroSection />
-      <FeatureSection />
-    </div>
+    <main className="flex min-h-screen flex-col items-center justify-center p-24">
+      <h1 className="text-4xl font-bold">Чистый лист</h1>
+    </main>
   );
 }
