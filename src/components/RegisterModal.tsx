@@ -45,7 +45,7 @@ export default function RegisterModal({ isOpen, onClose }: { isOpen: boolean; on
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Пароли не совпадают';
     }
-    if (!formData.agreement) newErrors.agreement = 'Требуется согласие с политикой';
+    if (!formData.agreement) newErrors.agreement = 'Требуется согласие';
     return newErrors;
   };
 
@@ -78,21 +78,39 @@ export default function RegisterModal({ isOpen, onClose }: { isOpen: boolean; on
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 animate-fadeIn">
-      <div className="bg-gray-900 border border-gray-700 rounded-3xl shadow-2xl max-w-md w-full p-8 transform transition-all animate-slideUp">
-        {success ? (
-          <div className="text-center py-10">
-            <div className="text-7xl mb-4 animate-bounce">🎉</div>
-            <div className="text-green-400 text-2xl font-bold">Отлично!</div>
-            <div className="text-gray-300 mt-3 text-lg">Аккаунт успешно создан!</div>
-          </div>
-        ) : (
-          <>
-            <h2 className="text-3xl font-bold text-center bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-6">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div
+        className="w-full max-w-md mx-auto bg-gray-900 border border-gray-700 rounded-3xl shadow-2xl overflow-hidden"
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Заголовок */}
+        <div className="px-8 pt-8 pb-6 text-center border-b border-gray-800">
+          {!success ? (
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
               Создать аккаунт
             </h2>
+          ) : (
+            <div className="flex flex-col items-center">
+              <div className="text-6xl mb-3 animate-bounce">🎉</div>
+              <div className="text-green-400 font-bold text-lg">Отлично!</div>
+              <div className="text-gray-300 text-sm mt-1">Аккаунт создан</div>
+            </div>
+          )}
+        </div>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
+        {/* Контент */}
+        <div className="px-8 py-6 max-h-[70vh] overflow-y-auto">
+          {success ? (
+            <div className="text-center py-4 text-gray-300 text-sm leading-relaxed">
+              Добро пожаловать в DemPlatForm!  
+              <br />
+              Вы можете войти в свой аккаунт.
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-4">
               {/* Email */}
               <div>
                 <input
@@ -101,7 +119,7 @@ export default function RegisterModal({ isOpen, onClose }: { isOpen: boolean; on
                   placeholder="Email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full p-4 bg-gray-800 border border-gray-600 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition placeholder-gray-400 text-white"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition placeholder-gray-400 text-white text-sm"
                 />
                 {errors.email && <div className="text-red-400 text-xs mt-1">{errors.email}</div>}
               </div>
@@ -113,7 +131,7 @@ export default function RegisterModal({ isOpen, onClose }: { isOpen: boolean; on
                   placeholder="Имя"
                   value={formData.firstName}
                   onChange={handleChange}
-                  className="w-full p-4 bg-gray-800 border border-gray-600 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition placeholder-gray-400 text-white"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition placeholder-gray-400 text-white text-sm"
                 />
                 {errors.firstName && <div className="text-red-400 text-xs mt-1">{errors.firstName}</div>}
               </div>
@@ -125,7 +143,7 @@ export default function RegisterModal({ isOpen, onClose }: { isOpen: boolean; on
                   placeholder="Фамилия"
                   value={formData.lastName}
                   onChange={handleChange}
-                  className="w-full p-4 bg-gray-800 border border-gray-600 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition placeholder-gray-400 text-white"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition placeholder-gray-400 text-white text-sm"
                 />
                 {errors.lastName && <div className="text-red-400 text-xs mt-1">{errors.lastName}</div>}
               </div>
@@ -137,7 +155,7 @@ export default function RegisterModal({ isOpen, onClose }: { isOpen: boolean; on
                   placeholder="Отчество (необязательно)"
                   value={formData.middleName}
                   onChange={handleChange}
-                  className="w-full p-4 bg-gray-800 border border-gray-600 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition placeholder-gray-400 text-white"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition placeholder-gray-400 text-white text-sm"
                 />
               </div>
 
@@ -148,7 +166,7 @@ export default function RegisterModal({ isOpen, onClose }: { isOpen: boolean; on
                   type="date"
                   value={formData.birthDate}
                   onChange={handleChange}
-                  className="w-full p-4 bg-gray-800 border border-gray-600 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition text-white"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition text-white text-sm"
                 />
                 {errors.birthDate && <div className="text-red-400 text-xs mt-1">{errors.birthDate}</div>}
               </div>
@@ -159,9 +177,9 @@ export default function RegisterModal({ isOpen, onClose }: { isOpen: boolean; on
                   name="gender"
                   value={formData.gender}
                   onChange={handleChange}
-                  className="w-full p-4 bg-gray-800 border border-gray-600 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition text-white"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition text-white text-sm"
                 >
-                  <option value="" disabled>Выберите пол</option>
+                  <option value="" disabled>Пол</option>
                   <option value="male">Мужской</option>
                   <option value="female">Женский</option>
                 </select>
@@ -176,12 +194,12 @@ export default function RegisterModal({ isOpen, onClose }: { isOpen: boolean; on
                   placeholder="Пароль"
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full p-4 bg-gray-800 border border-gray-600 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition placeholder-gray-400 text-white pr-12"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition placeholder-gray-400 text-white text-sm pr-12"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-blue-400 transition"
+                  className="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-blue-400 text-sm transition"
                 >
                   {showPassword ? '🙈' : '👁️'}
                 </button>
@@ -196,12 +214,12 @@ export default function RegisterModal({ isOpen, onClose }: { isOpen: boolean; on
                   placeholder="Повторите пароль"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className="w-full p-4 bg-gray-800 border border-gray-600 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition placeholder-gray-400 text-white pr-12"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition placeholder-gray-400 text-white text-sm pr-12"
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-blue-400 transition"
+                  className="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-blue-400 text-sm transition"
                 >
                   {showConfirmPassword ? '🙈' : '👁️'}
                 </button>
@@ -215,14 +233,13 @@ export default function RegisterModal({ isOpen, onClose }: { isOpen: boolean; on
                   type="checkbox"
                   checked={formData.agreement}
                   onChange={handleChange}
-                  className="w-5 h-5 mt-1 text-blue-600 rounded focus:ring-blue-500"
+                  className="w-4 h-4 mt-1 text-blue-600 rounded focus:ring-blue-500"
                 />
-                <label className="text-sm text-gray-400 leading-relaxed">
+                <label className="text-xs text-gray-400 leading-relaxed">
                   Я согласен с{' '}
-                  <a href="/privacy" className="text-blue-400 hover:underline font-medium">
+                  <a href="/privacy" className="text-blue-400 hover:underline">
                     политикой конфиденциальности
-                  </a>{' '}
-                  и даю согласие на обработку персональных данных.
+                  </a>
                 </label>
               </div>
               {errors.agreement && <div className="text-red-400 text-xs mt-1">{errors.agreement}</div>}
@@ -230,22 +247,24 @@ export default function RegisterModal({ isOpen, onClose }: { isOpen: boolean; on
               {/* Кнопка */}
               <button
                 type="submit"
-                className="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
+                className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium rounded-xl transition-all duration-200 shadow-md hover:shadow-lg"
               >
                 Создать аккаунт
               </button>
             </form>
-          </>
-        )}
+          )}
+        </div>
 
-        {/* Кнопка закрытия */}
-        <button
-          onClick={onClose}
-          disabled={success}
-          className="mt-6 w-full py-3 text-gray-400 hover:text-blue-400 text-sm font-medium transition disabled:opacity-60"
-        >
-          Закрыть
-        </button>
+        {/* Подвал */}
+        <div className="px-8 py-4 bg-gray-950/50 text-center border-t border-gray-800">
+          <button
+            onClick={onClose}
+            disabled={success}
+            className="text-gray-400 text-sm hover:text-blue-400 transition disabled:opacity-60"
+          >
+            Закрыть
+          </button>
+        </div>
       </div>
     </div>
   );
