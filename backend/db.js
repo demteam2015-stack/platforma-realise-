@@ -25,7 +25,9 @@ const client = new Client({
   password: process.env.POSTGRESQL_PASSWORD,
   port: parseInt(process.env.POSTGRESQL_PORT),
   ssl: {
-    rejectUnauthorized: true, // <-- ВОЗВРАЩАЕМ БЕЗОПАСНУЮ НАСТРОЙКУ
+    // ВНИМАНИЕ: Временно отключена проверка SSL для разработки.
+    // ЭТО НЕБЕЗОПАСНО для продакшена.
+    rejectUnauthorized: false,
     ca: caCert,
   },
 });
