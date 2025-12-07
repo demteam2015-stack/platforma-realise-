@@ -11,8 +11,8 @@ import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 
 export default function SimpleSheet() {
-  const [sheetName, setSheetName] = useState("Untitled Sheet");
-  const [content, setContent] = useState("<p>Start typing here...</p>");
+  const [sheetName, setSheetName] = useState("Безымянный лист");
+  const [content, setContent] = useState("<p><br></p>");
   const editorRef = useRef<HTMLDivElement>(null);
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
@@ -35,8 +35,8 @@ export default function SimpleSheet() {
     startTransition(async () => {
       if (!editorRef.current || !editorRef.current.innerText.trim()) {
         toast({
-          title: "Sheet is empty",
-          description: "Please add some content before generating a name.",
+          title: "Лист пуст",
+          description: "Пожалуйста, добавьте содержимое перед генерацией названия.",
           variant: "destructive",
         });
         return;
@@ -48,15 +48,15 @@ export default function SimpleSheet() {
         if (result.sheetName) {
           setSheetName(result.sheetName);
           toast({
-            title: "Sheet name generated!",
-            description: `We've named your sheet: "${result.sheetName}"`,
+            title: "Название листа сгенерировано!",
+            description: `Мы назвали ваш лист: "${result.sheetName}"`,
           });
         }
       } catch (error) {
         console.error("Failed to generate sheet name:", error);
         toast({
-          title: "Error",
-          description: "Failed to generate a name for the sheet.",
+          title: "Ошибка",
+          description: "Не удалось сгенерировать название для листа.",
           variant: "destructive",
         });
       }
@@ -75,19 +75,19 @@ export default function SimpleSheet() {
             value={sheetName}
             onChange={(e) => setSheetName(e.target.value)}
             className="text-2xl font-bold flex-grow border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 h-auto bg-transparent"
-            placeholder="Untitled Sheet"
+            placeholder="Безымянный лист"
             aria-label="Sheet Name"
           />
           <Button onClick={handleGenerateName} disabled={isPending}>
             {isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Generating...
+                Генерация...
               </>
             ) : (
               <>
                 <Wand2 className="mr-2 h-4 w-4" />
-                Generate Name
+                Сгенерировать название
               </>
             )}
           </Button>
@@ -95,13 +95,13 @@ export default function SimpleSheet() {
       </CardHeader>
       <Separator />
       <div className="flex items-center gap-1 p-2 border-b bg-card/95 backdrop-blur-sm sticky top-0 z-10">
-        <Button variant="ghost" size="icon" title="Bold" aria-label="Bold" onMouseDown={(e) => { e.preventDefault(); handleFormat("bold"); }}>
+        <Button variant="ghost" size="icon" title="Жирный" aria-label="Жирный" onMouseDown={(e) => { e.preventDefault(); handleFormat("bold"); }}>
           <Bold className="h-4 w-4" />
         </Button>
-        <Button variant="ghost" size="icon" title="Italic" aria-label="Italic" onMouseDown={(e) => { e.preventDefault(); handleFormat("italic"); }}>
+        <Button variant="ghost" size="icon" title="Курсив" aria-label="Курсив" onMouseDown={(e) => { e.preventDefault(); handleFormat("italic"); }}>
           <Italic className="h-4 w-4" />
         </Button>
-        <Button variant="ghost" size="icon" title="Underline" aria-label="Underline" onMouseDown={(e) => { e.preventDefault(); handleFormat("underline"); }}>
+        <Button variant="ghost" size="icon" title="Подчеркнутый" aria-label="Подчеркнутый" onMouseDown={(e) => { e.preventDefault(); handleFormat("underline"); }}>
           <Underline className="h-4 w-4" />
         </Button>
       </div>
