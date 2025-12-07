@@ -1,40 +1,16 @@
-// db.js
+// backend/db.js
 const { Client } = require('pg');
-const fs = require('fs');
-const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '.env') });
+require('dotenv').config();
 
-const isProduction = process.env.NODE_ENV === 'production';
-
-// Путь к SSL-сертификату
-const caCertPath = path.join(__dirname, '.cloud-certs', 'root.crt');
-let caCert;
-
-try {
-  caCert = fs.readFileSync(caCertPath, 'utf-8');
-} catch (err) {
-  // В продакшене сертификат обязателен
-  if (isProduction) {
-    console.error('❌ КРИТИЧЕСКАЯ ОШИБКА: Не удалось прочитать SSL-сертификат в продакшен-окружении.');
-    process.exit(1);
-  }
-}
-
-// Настройки SSL
-const sslConfig = {
-  ca: caCert,
-  // В продакшене используем безопасный режим, для разработки - временное решение
-  rejectUnauthorized: isProduction, 
-};
-
+// Render предоставляет переменную окружения DATABASE_URL, которая содержит все необходимое.
+// Это предпочтительный и самый надежный способ подключения.
+const connectionString = process.env.DATABASE_URL;
 
 const client = new Client({
-  user: process.env.POSTGRESQL_USER,
-  host: process.env.POSTGRESQL_HOST,
-  database: process.env.POSTGRESQL_DBNAME,
-  password: process.env.POSTGRESQL_PASSWORD,
-  port: parseInt(process.env.POSTGRESQL_PORT),
-  ssl: isProduction ? sslConfig : { rejectUnauthorized: false },
+  connectionString: connectionString,
+  // Для продакшена на Render всегда требуется SSL.
+  // Эта конфигурация будет работать как на Render, так и локально, если у локальной БД нет SSL.
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
 
 module.exports = client;
